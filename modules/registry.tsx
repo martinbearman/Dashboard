@@ -7,7 +7,7 @@ const TimerModule: DashboardModule = {
   displayName: "Timer",
   description: "Pomodoro-style timer for focused work sessions",
   defaultGridSize: { w: 3, h: 2 },
-  component: () => <div className="p-4 bg-blue-100 rounded">Timer Module</div>,
+  component: () => <div className="p-4 bg-blue-100 rounded text-black">Timer Module</div>,
 };
 
 const TodoModule: DashboardModule = {

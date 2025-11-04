@@ -26,3 +26,6 @@ body {
   }
 }
 
+/* Temporary: responsive grid positioning until react-grid-layout is implemented */
+/* react-grid-layout will handle this properly with drag-and-drop */
+

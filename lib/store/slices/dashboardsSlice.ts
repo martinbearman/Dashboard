@@ -7,8 +7,20 @@ interface DashboardsState {
 }
 
 const initialState: DashboardsState = {
-  activeDashboardId: null,
-  dashboards: {},
+  activeDashboardId: "board-1",
+  dashboards: {
+    "board-1": {
+      id: "board-1",
+      name: "Board 1",
+      modules: [
+        {
+          id: "m-1",
+          type: "timer", // matches your registry
+          gridPosition: { x: 0, y: 0, w: 3, h: 2 },
+        },
+      ],
+    },
+  },
 };
 
 const dashboardsSlice = createSlice({

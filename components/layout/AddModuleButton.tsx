@@ -1,11 +1,140 @@
 "use client";
 
-// TODO: Implement + button with dropdown showing available modules
-export default function AddModuleButton() {
-  return (
-    <button className="fixed bottom-8 right-8 w-14 h-14 bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 flex items-center justify-center text-2xl">
-      +
-    </button>
-  );
+import { useEffect, useMemo, useState } from "react";
+import { moduleRegistry } from "@/modules/registry";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { addModule } from "@/lib/store/slices/dashboardsSlice";
+
+function nextPosition(existing: { x: number; y: number; w: number; h: number }[]) {
+  // Simple heuristic: place next item after the last one, wrap at 12 columns
+  if (existing.length === 0) return { x: 0, y: 0, w: 3, h: 2 };
+  const last = existing[existing.length - 1];
+  const nextX = last.x + last.w;
+  if (nextX + last.w <= 12) return { x: nextX, y: last.y, w: last.w, h: last.h };
+  return { x: 0, y: last.y + last.h, w: last.w, h: last.h };
 }
 
+export default function AddModuleButton() {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const dispatch = useAppDispatch();
+  const { activeDashboardId, dashboards } = useAppSelector((s) => s.dashboards);
+
+  // Basic search filter (name + description)
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return moduleRegistry;
+    return moduleRegistry.filter(
+      (m) =>
+        m.displayName.toLowerCase().includes(q) ||
+        m.description.toLowerCase().includes(q)
+    );
+  }, [query]);
+
+  // Close on Escape
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  const handleAdd = (type: string) => {
+    if (!activeDashboardId) return;
+    const dash = dashboards[activeDashboardId];
+    const positions = dash.modules.map((m) => m.gridPosition);
+    const meta = moduleRegistry.find((m) => m.type === type);
+    const size = meta?.defaultGridSize ?? { w: 3, h: 2 };
+    const pos = positions.length
+      ? nextPosition(positions)
+      : { x: 0, y: 0, w: size.w, h: size.h };
+
+    dispatch(
+      addModule({
+        dashboardId: activeDashboardId,
+        module: {
+          id: crypto.randomUUID(),
+          type,
+          gridPosition: { x: pos.x, y: pos.y, w: size.w, h: size.h },
+        },
+      })
+    );
+    setOpen(false);
+  };
+
+  return (
+    <>
+      <button
+        onClick={() => setOpen(true)}
+        className="fixed bottom-8 right-8 w-14 h-14 bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 flex items-center justify-center text-2xl"
+        aria-label="Add module"
+      >
+        +
+      </button>
+
+      {open && (
+        <div
+          className="fixed inset-0 z-50"
+          aria-modal="true"
+          role="dialog"
+          onClick={() => setOpen(false)}
+        >
+          {/* overlay */}
+          <div className="absolute inset-0 bg-black/50" />
+
+          {/* modal */}
+          <div
+            className="absolute inset-0 flex items-center justify-center p-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="w-full max-w-2xl rounded-xl bg-white text-black shadow-xl">
+              <div className="flex items-center justify-between p-4 border-b">
+                <h2 className="text-lg font-semibold">Add a module</h2>
+                <button
+                  className="rounded p-1 text-gray-500 hover:text-gray-700"
+                  onClick={() => setOpen(false)}
+                  aria-label="Close"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="p-4">
+                {/* Search (non-functional styling now, functional filter above) */}
+                <input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search modules…"
+                  className="w-full rounded-md border px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div className="max-h-96 overflow-auto px-4 pb-4 space-y-2">
+                {filtered.map((m) => (
+                  <button
+                    key={m.type}
+                    onClick={() => handleAdd(m.type)}
+                    className="w-full text-left rounded-lg border hover:bg-gray-50 p-4 flex items-start gap-3"
+                  >
+                    <div className="mt-1 text-xl">🧩</div>
+                    <div>
+                      <div className="font-medium">{m.displayName}</div>
+                      <div className="text-sm text-gray-600">{m.description}</div>
+                    </div>
+                  </button>
+                ))}
+                {filtered.length === 0 && (
+                  <div className="text-center text-sm text-gray-500 py-6">
+                    No modules match “{query}”
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
