@@ -2,7 +2,8 @@
 
 import { useRef } from "react";
 import { Provider } from "react-redux";
-import { makeStore, AppStore } from "./store";
+import { makeStore, AppStore, RootState } from "./store";
+import { loadState } from "./localStorage";
 
 export default function StoreProvider({
   children,
@@ -11,7 +12,9 @@ export default function StoreProvider({
 }) {
   const storeRef = useRef<AppStore>();
   if (!storeRef.current) {
-    storeRef.current = makeStore();
+    // Load state from localStorage on client-side only
+    const preloadedState = loadState() as Partial<RootState> | undefined;
+    storeRef.current = makeStore(preloadedState);
   }
 
   return <Provider store={storeRef.current}>{children}</Provider>;

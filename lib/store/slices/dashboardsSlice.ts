@@ -6,6 +6,7 @@ interface DashboardsState {
   dashboards: Record<string, Dashboard>;
 }
 
+// Default initial state (used if no saved state exists)
 const initialState: DashboardsState = {
   activeDashboardId: "board-1",
   dashboards: {
