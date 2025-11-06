@@ -1,18 +1,49 @@
 "use client";
 
+import "react-grid-layout/css/styles.css";
+import "react-resizable/css/styles.css";
+ 
 // Page-level composition: keep data selection and module mapping here
 // so `DashboardContainer` can focus purely on layout concerns.
 import DashboardTabs from "@/components/layout/DashboardTabs";
-import DashboardContainer from "@/components/layout/DashboardContainer";
 import AddModuleButton from "@/components/layout/AddModuleButton";
-import { useAppSelector } from "@/lib/store/hooks";
+import { useAppSelector, useAppDispatch } from "@/lib/store/hooks";
 import { getModuleByType } from "@/modules/registry";
 import ModuleWrapper from "@/components/modules/ModuleWrapper";
+import { updateModulePosition } from "@/lib/store/slices/dashboardsSlice";
+import { WidthProvider, Responsive, type Layout } from "react-grid-layout";
+
+const ResponsiveGridLayout = WidthProvider(Responsive);
 
 export default function Home() {
   // Read the active dashboard and all dashboards from Redux
   const { activeDashboardId, dashboards } = useAppSelector((s) => s.dashboards);
   const active = activeDashboardId ? dashboards[activeDashboardId] : null;
+  const dispatch = useAppDispatch();
+
+  const layouts = {
+    lg:
+      (active?.modules.map((m) => ({
+        i: m.id,
+        x: m.gridPosition.x,
+        y: m.gridPosition.y,
+        w: m.gridPosition.w,
+        h: m.gridPosition.h,
+      })) as Layout[]) || [],
+  } as const;
+
+  function handleLayoutChange(current: Layout[]) {
+    if (!active) return;
+    current.forEach(({ i, x, y, w, h }) => {
+      dispatch(
+        updateModulePosition({
+          dashboardId: active.id,
+          moduleId: i,
+          position: { x, y, w, h },
+        })
+      );
+    });
+  }
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-800 to-blue-900">
@@ -22,24 +53,39 @@ export default function Home() {
       </div>
 
       <div className="container mx-auto px-4 pb-24">
-        {/*
-          Decoupled rendering: the container provides grid/layout only.
-          We map module instances here and render their components.
-        */}
-        <DashboardContainer>
+        <ResponsiveGridLayout
+          className="layout"
+          layouts={layouts}
+          breakpoints={{ lg: 1024, md: 768, sm: 640, xs: 480, xxs: 0 }}
+          cols={{ lg: 12, md: 8, sm: 6, xs: 4, xxs: 1 }}
+          rowHeight={32}
+          margin={[16, 16]}
+          compactType="vertical"
+          preventCollision={false}
+          onLayoutChange={(layout) => handleLayoutChange(layout)}
+        >
           {active?.modules.map((m) => {
-            // Lookup the module definition (component, metadata) by type
             const meta = getModuleByType(m.type);
             if (!meta) return null;
             const ModuleComp = meta.component;
             return (
-              // Wrapper handles per-module shell; DnD hooks will live here later
-              <ModuleWrapper key={m.id} moduleId={m.id} gridPosition={m.gridPosition}>
-                <ModuleComp moduleId={m.id} />
-              </ModuleWrapper>
+              <div
+                key={m.id}
+                className="h-full"
+                data-grid={{
+                  x: m.gridPosition.x,
+                  y: m.gridPosition.y,
+                  w: m.gridPosition.w,
+                  h: m.gridPosition.h,
+                }}
+              >
+                <ModuleWrapper moduleId={m.id} gridPosition={m.gridPosition}>
+                  <ModuleComp moduleId={m.id} />
+                </ModuleWrapper>
+              </div>
             );
           })}
-        </DashboardContainer>
+        </ResponsiveGridLayout>
       </div>
 
       {/* Floating add button (will become a dropdown sourced from the registry) */}

@@ -39,7 +39,7 @@ export default function ModuleWrapper({
   return (
     <div
       ref={ref}
-      className="bg-white rounded-lg shadow-md p-4 text-black"
+      className="bg-white rounded-lg shadow-md p-4 text-black relative h-full w-full"
       // Note: react-grid-layout will replace this with:
       // - Drag and drop functionality
       // - Responsive breakpoints (mobile/tablet/desktop layouts)
