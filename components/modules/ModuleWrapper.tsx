@@ -17,6 +17,7 @@ export default function ModuleWrapper({
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+
     if (!ref.current) return;
     const element = ref.current;
 

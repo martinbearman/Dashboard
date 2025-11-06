@@ -11,10 +11,12 @@ export default function StoreProvider({
   children: React.ReactNode;
 }) {
   const storeRef = useRef<AppStore>();
+
   if (!storeRef.current) {
-    // Load state from localStorage on client-side only
-    const preloadedState = loadState() as Partial<RootState> | undefined;
-    storeRef.current = makeStore(preloadedState);
+    // Important: create the store with a consistent initial state
+    // on both server and client to avoid hydration mismatches.
+    // Persisted localStorage state will be reconciled by middleware/effects after mount.
+    storeRef.current = makeStore();
   }
 
   return <Provider store={storeRef.current}>{children}</Provider>;

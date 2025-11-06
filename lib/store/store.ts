@@ -1,16 +1,20 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import dashboardsReducer from "./slices/dashboardsSlice";
 import globalConfigReducer from "./slices/globalConfigSlice";
 import moduleConfigsReducer from "./slices/moduleConfigsSlice";
 import { localStorageMiddleware } from "./middleware/localStorageMiddleware";
 
-export const makeStore = (preloadedState?: any) => {
+const rootReducer = combineReducers({
+  dashboards: dashboardsReducer,
+  globalConfig: globalConfigReducer,
+  moduleConfigs: moduleConfigsReducer,
+});
+
+export type RootState = ReturnType<typeof rootReducer>;
+
+export const makeStore = (preloadedState?: Partial<RootState>) => {
   return configureStore({
-    reducer: {
-      dashboards: dashboardsReducer,
-      globalConfig: globalConfigReducer,
-      moduleConfigs: moduleConfigsReducer,
-    },
+    reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(localStorageMiddleware),
     // Preload state from localStorage (passed from StoreProvider)
@@ -19,6 +23,5 @@ export const makeStore = (preloadedState?: any) => {
 };
 
 export type AppStore = ReturnType<typeof makeStore>;
-export type RootState = ReturnType<AppStore["getState"]>;
 export type AppDispatch = AppStore["dispatch"];
 
