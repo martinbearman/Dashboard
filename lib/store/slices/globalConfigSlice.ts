@@ -1,12 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface GlobalConfigState {
+export interface GlobalConfigState {
   theme: "light" | "dark";
 }
 
-const initialState: GlobalConfigState = {
+export const createInitialGlobalConfigState = (): GlobalConfigState => ({
   theme: "light",
-};
+});
+
+const initialState: GlobalConfigState = createInitialGlobalConfigState();
 
 const globalConfigSlice = createSlice({
   name: "globalConfig",

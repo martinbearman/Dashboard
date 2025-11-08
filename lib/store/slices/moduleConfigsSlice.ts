@@ -1,12 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface ModuleConfigsState {
+export interface ModuleConfigsState {
   configs: Record<string, Record<string, any>>; // moduleId -> config object
 }
 
-const initialState: ModuleConfigsState = {
+export const createInitialModuleConfigsState = (): ModuleConfigsState => ({
   configs: {},
-};
+});
+
+const initialState: ModuleConfigsState = createInitialModuleConfigsState();
 
 const moduleConfigsSlice = createSlice({
   name: "moduleConfigs",

@@ -46,7 +46,7 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-800 to-blue-900">
+    <main className="min-h-screen bg-gradient-to-b to-blue-100 from-slate-600">
       <div className="py-6">
         {/* dashboard tabs (centered) */}
         <DashboardTabs />

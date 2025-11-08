@@ -1,13 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Dashboard, ModuleInstance } from "@/lib/types/dashboard";
 
-interface DashboardsState {
+export interface DashboardsState {
   activeDashboardId: string | null;
   dashboards: Record<string, Dashboard>;
 }
 
-// Default initial state (used if no saved state exists)
-const initialState: DashboardsState = {
+export const createInitialDashboardsState = (): DashboardsState => ({
   activeDashboardId: "board-1",
   dashboards: {
     "board-1": {
@@ -21,8 +20,22 @@ const initialState: DashboardsState = {
         },
       ],
     },
+    "board-2": {
+      id: "board-2",
+      name: "Board 2",
+      modules: [
+        {
+          id: "m-2",
+          type: "timer", // matches your registry
+          gridPosition: { x: 0, y: 0, w: 3, h: 2 },
+        },
+      ],
+    },
   },
-};
+});
+
+// Default initial state (used if no saved state exists)
+const initialState: DashboardsState = createInitialDashboardsState();
 
 const dashboardsSlice = createSlice({
   name: "dashboards",

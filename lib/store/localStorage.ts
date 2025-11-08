@@ -1,4 +1,7 @@
 import { RootState } from "./store";
+import { createInitialDashboardsState } from "./slices/dashboardsSlice";
+import { createInitialGlobalConfigState } from "./slices/globalConfigSlice";
+import { createInitialModuleConfigsState } from "./slices/moduleConfigsSlice";
 
 const STORAGE_KEY = "dashboard-state";
 
@@ -17,7 +20,32 @@ export function loadState(): Partial<RootState> | null {
     if (serializedState === null) {
       return null;
     }
-    return JSON.parse(serializedState);
+    const parsed = JSON.parse(serializedState) as Partial<RootState>;
+
+    const defaultDashboards = createInitialDashboardsState();
+    const defaultGlobalConfig = createInitialGlobalConfigState();
+    const defaultModuleConfigs = createInitialModuleConfigsState();
+
+    return {
+      dashboards: {
+        ...defaultDashboards,
+        ...(parsed.dashboards ?? {}),
+        dashboards: {
+          ...defaultDashboards.dashboards,
+          ...(parsed.dashboards?.dashboards ?? {}),
+        },
+        activeDashboardId:
+          parsed.dashboards?.activeDashboardId ?? defaultDashboards.activeDashboardId,
+      },
+      globalConfig: {
+        ...defaultGlobalConfig,
+        ...(parsed.globalConfig ?? {}),
+      },
+      moduleConfigs: {
+        ...defaultModuleConfigs,
+        ...(parsed.moduleConfigs ?? {}),
+      },
+    };
   } catch (error) {
     console.warn("Failed to load state from localStorage:", error);
     return null;
