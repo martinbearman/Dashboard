@@ -8,8 +8,11 @@ import AddModuleButton from "@/components/layout/AddModuleButton";
 import { useAppSelector, useAppDispatch } from "@/lib/store/hooks";
 import { getModuleByType } from "@/modules/registry";
 import ModuleWrapper from "@/components/modules/ModuleWrapper";
-import { updateModulePosition } from "@/lib/store/slices/dashboardsSlice";
-import { WidthProvider, Responsive, type Layout } from "react-grid-layout";
+import {
+  updateModulePosition,
+  updateDashboardLayouts,
+} from "@/lib/store/slices/dashboardsSlice";
+import { WidthProvider, Responsive, type Layout, type Layouts } from "react-grid-layout";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -19,19 +22,15 @@ export default function Home() {
   const active = activeDashboardId ? dashboards[activeDashboardId] : null;
   const dispatch = useAppDispatch();
 
-  const layouts = {
-    lg:
-      active?.modules.map<Layout>((m) => ({
-        i: m.id,
-        x: m.gridPosition.x,
-        y: m.gridPosition.y,
-        w: m.gridPosition.w,
-        h: m.gridPosition.h,
-      })) ?? [],
-  };
+  // react-grid-layout expects a layout array for every breakpoint; start with empty defaults
+  const defaultLayouts: Layouts = { lg: [], md: [], sm: [], xs: [], xxs: [] };
+  // Merge the stored layouts (if any) with the empty defaults so missing breakpoints still exist
+  const layouts: Layouts =
+    active?.layouts ? ({ ...defaultLayouts, ...active.layouts } as Layouts) : defaultLayouts;
 
-  function handleLayoutChange(current: Layout[]) {
+  function handleLayoutChange(current: Layout[], allLayouts: Layouts) {
     if (!active) return;
+    // Update the canonical gridPosition for each module (used by modules and default layout seeds)
     current.forEach(({ i, x, y, w, h }) => {
       dispatch(
         updateModulePosition({
@@ -41,6 +40,13 @@ export default function Home() {
         })
       );
     });
+    // Persist the complete set of breakpoint layouts so drag/resize survives reloads
+    dispatch(
+      updateDashboardLayouts({
+        dashboardId: active.id,
+        layouts: allLayouts,
+      })
+    );
   }
 
   return (
@@ -60,22 +66,14 @@ export default function Home() {
           margin={[16, 16]}
           compactType="vertical"
           preventCollision={false}
-          onLayoutChange={(layout) => handleLayoutChange(layout)}
+          onLayoutChange={(layout, allLayouts) => handleLayoutChange(layout, allLayouts as Layouts)}
         >
           {active?.modules.map((m) => {
             const meta = getModuleByType(m.type);
             if (!meta) return null;
             const ModuleComp = meta.component;
             return (
-              <div
-                key={m.id}
-                data-grid={{
-                  x: m.gridPosition.x,
-                  y: m.gridPosition.y,
-                  w: m.gridPosition.w,
-                  h: m.gridPosition.h,
-                }}
-              >
+              <div key={m.id}>
                 <ModuleWrapper>
                   <ModuleComp moduleId={m.id} />
                 </ModuleWrapper>

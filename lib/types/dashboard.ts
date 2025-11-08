@@ -1,4 +1,7 @@
 import { ReactNode } from "react";
+import type { Layout } from "react-grid-layout";
+
+export type Breakpoint = "lg" | "md" | "sm" | "xs" | "xxs";
 
 /**
  * A module instance on a dashboard
@@ -16,6 +19,7 @@ export interface Dashboard {
   id: string;
   name: string;
   modules: ModuleInstance[];
+  layouts?: Partial<Record<Breakpoint, Layout[]>>;
 }
 
 /**

@@ -1,5 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Dashboard, ModuleInstance } from "@/lib/types/dashboard";
+import type { Dashboard, ModuleInstance, Breakpoint } from "@/lib/types/dashboard";
+import type { Layout, Layouts } from "react-grid-layout";
+
+// Central source of truth for the breakpoints the grid supports
+const BREAKPOINTS: Breakpoint[] = ["lg", "md", "sm", "xs", "xxs"];
 
 export interface DashboardsState {
   activeDashboardId: string | null;
@@ -16,9 +20,16 @@ export const createInitialDashboardsState = (): DashboardsState => ({
         {
           id: "m-1",
           type: "timer", // matches your registry
-          gridPosition: { x: 0, y: 0, w: 3, h: 2 },
+          gridPosition: { x: 0, y: 0, w: 3, h: 2 }
         },
       ],
+      layouts: {
+        lg: [{ i: "m-1", x: 0, y: 0, w: 3, h: 2 }],
+        md: [{ i: "m-1", x: 0, y: 0, w: 3, h: 2 }],
+        sm: [{ i: "m-1", x: 0, y: 0, w: 3, h: 2 }],
+        xs: [{ i: "m-1", x: 0, y: 0, w: 3, h: 2 }],
+        xxs: [{ i: "m-1", x: 0, y: 0, w: 12, h: 2 }]
+      }
     },
   },
 });
@@ -42,23 +53,61 @@ const dashboardsSlice = createSlice({
       }
     },
     addModule: (
-      state,
+      state, 
       action: PayloadAction<{ dashboardId: string; module: ModuleInstance }>
     ) => {
-      const dashboard = state.dashboards[action.payload.dashboardId];
-      if (dashboard) {
-        dashboard.modules.push(action.payload.module);
-      }
+      const { dashboardId, module } = action.payload;
+      const dashboard = state.dashboards[dashboardId];
+      if (!dashboard) return;
+    
+      dashboard.modules.push(module);
+    
+      dashboard.layouts = dashboard.layouts ?? {};
+    
+      // Keep each breakpoint layout in sync with the new module
+      BREAKPOINTS.forEach((bp) => {
+        const layout = dashboard.layouts![bp];
+    
+        if (layout) {
+          // Remove any stale entry for this module (defensive)
+          dashboard.layouts![bp] = layout.filter((item) => item.i !== module.id);
+          dashboard.layouts![bp]!.push({
+            i: module.id,
+            x: module.gridPosition.x,
+            y: module.gridPosition.y,
+            w: module.gridPosition.w,
+            h: module.gridPosition.h,
+          });
+        } else {
+          // No layout for this breakpoint yet; rebuild it from all modules
+          dashboard.layouts![bp] = dashboard.modules.map((m) => ({
+            i: m.id,
+            x: m.gridPosition.x,
+            y: m.gridPosition.y,
+            w: m.gridPosition.w,
+            h: m.gridPosition.h,
+          }));
+        }
+      });
     },
     removeModule: (
       state,
       action: PayloadAction<{ dashboardId: string; moduleId: string }>
     ) => {
-      const dashboard = state.dashboards[action.payload.dashboardId];
-      if (dashboard) {
-        dashboard.modules = dashboard.modules.filter(
-          (m) => m.id !== action.payload.moduleId
-        );
+      const { dashboardId, moduleId } = action.payload;
+      const dashboard = state.dashboards[dashboardId];
+      if (!dashboard) return;
+    
+      dashboard.modules = dashboard.modules.filter((m) => m.id !== moduleId);
+    
+      if (dashboard.layouts) {
+        BREAKPOINTS.forEach((bp) => {
+          const layout = dashboard.layouts![bp];
+          if (layout) {
+            // Drop the module from every breakpoint layout to avoid ghost grid items
+            dashboard.layouts![bp] = layout.filter((item) => item.i !== moduleId);
+          }
+        });
       }
     },
     updateModulePosition: (
@@ -70,13 +119,28 @@ const dashboardsSlice = createSlice({
       }>
     ) => {
       const dashboard = state.dashboards[action.payload.dashboardId];
-      if (dashboard) {
-        const moduleInstance = dashboard.modules.find(
-          (m) => m.id === action.payload.moduleId
-        );
-        if (moduleInstance) {
-          moduleInstance.gridPosition = action.payload.position;
-        }
+      if (!dashboard) return;
+
+      const moduleInstance = dashboard.modules.find(
+        (m) => m.id === action.payload.moduleId
+      );
+      if (moduleInstance) {
+        moduleInstance.gridPosition = action.payload.position;
+      }
+
+      if (dashboard.layouts) {
+        BREAKPOINTS.forEach((bp) => {
+          const layout = dashboard.layouts![bp];
+          if (!layout) return;
+          const layoutItem = layout.find((item) => item.i === action.payload.moduleId);
+          if (layoutItem) {
+            // Mirror the position so the saved layout matches what react-grid-layout just produced
+            layoutItem.x = action.payload.position.x;
+            layoutItem.y = action.payload.position.y;
+            layoutItem.w = action.payload.position.w;
+            layoutItem.h = action.payload.position.h;
+          }
+        });
       }
     },
     removeDashboard: (state, action: PayloadAction<string>) => {
@@ -135,6 +199,21 @@ const dashboardsSlice = createSlice({
         state.activeDashboardId = remainingIds[0];
       }
     },
+    updateDashboardLayouts: (
+      state,
+      action: PayloadAction<{
+        dashboardId: string;
+        layouts: Partial<Record<Breakpoint, Layout[]>> | Layouts;
+      }>
+    ) => {
+      const dashboard = state.dashboards[action.payload.dashboardId];
+      if (!dashboard) return;
+      // Merge the layouts emitted by react-grid-layout so each breakpoint persists its latest arrangement
+      dashboard.layouts = {
+        ...dashboard.layouts,
+        ...action.payload.layouts,
+      };
+    }
   },
 });
 
@@ -145,6 +224,7 @@ export const {
   removeModule,
   updateModulePosition,
   removeDashboard,
+  updateDashboardLayouts
 } = dashboardsSlice.actions;
 
 export default dashboardsSlice.reducer;
