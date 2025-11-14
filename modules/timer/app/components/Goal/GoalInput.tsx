@@ -119,22 +119,24 @@ export default function GoalInput() {
           />
         )}
         
-        <button 
-          onClick={getButtonClickHandler()}
-          disabled={isButtonDisabled}
-          className="disabled:text-gray-500 disabled:bg-red-100 w-full px-6 py-3 font-semibold rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"
-        >
-          {handleGetButtonText()}
-        </button>
-        
-        {!isRunning && currentGoal && timeRemaining !== 0 && (
+        <div className="flex gap-3">
           <button 
-            onClick={handleSaveForLater}
-            className="w-full px-6 py-3 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors"
+            onClick={getButtonClickHandler()}
+            disabled={isButtonDisabled}
+            className="disabled:text-gray-500 disabled:bg-red-100 flex-1 px-6 py-3 font-semibold rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"
           >
-            Save for Later
+            {handleGetButtonText()}
           </button>
-        )}
+          
+          {!isRunning && currentGoal && timeRemaining !== 0 && (
+            <button 
+              onClick={handleSaveForLater}
+              className="flex-1 px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors"
+            >
+              Save for Later
+            </button>
+          )}
+        </div>
       </div>
     </div>
   )

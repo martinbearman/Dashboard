@@ -1,13 +1,15 @@
 import { DashboardModule } from "@/lib/types/dashboard";
 import TimerModuleComponent from "./timer/TimerModule";
+import TimerConfigPanel from "./timer/app/components/Settings/TimerConfigPanel";
 
 // Timer module - component lives in modules/timer/ folder
 const TimerModule: DashboardModule = {
-  type: "timer",
-  displayName: "Timer",
+  type: "Timer",
+  displayName: "Pomodoro Timer",
   description: "Pomodoro-style timer for focused work sessions",
-  defaultGridSize: { w: 3, h: 2 },
+  defaultGridSize: { w: 4, h: 3 },
   component: TimerModuleComponent,
+  configPanel: TimerConfigPanel,
 };
 
 // Placeholder modules - create folders for these when implementing
