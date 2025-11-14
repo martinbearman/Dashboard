@@ -18,13 +18,14 @@ export default function BreakSettings() {
   }
 
   return (
-    <div className="relative">
+    <div className="relative flex items-center gap-3">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="px-4 py-2 bg-red-500 text-white hover:bg-red-600 rounded-lg text-sm font-medium transition-colors"
-      >
-        ⚙️ Break Settings
+        className="text-5xl">⚙️
       </button>
+      <div className="text-sm text-gray-600">
+        <p className="font-medium">Break: {Math.floor(breakDuration / 60)} min ({breakMode})</p>
+      </div>
 
       {isOpen && (
         <div className="absolute top-12 right-0 bg-white border border-gray-200 rounded-lg shadow-lg p-4 w-80 z-10">

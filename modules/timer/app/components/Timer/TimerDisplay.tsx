@@ -132,19 +132,19 @@ export default function TimerDisplay() {
       )}
 
       <div className="relative w-full flex flex-col items-center">
-        <div className="relative" style={{ width: '120px', height: '120px' }}>
+        <div className="relative" style={{ width: '180px' }}>
           <Image 
             src="/icons/tomato-too.svg" 
             alt="Timer" 
-            width={120}
-            height={120}
+            width={180}
+            height={180}
             style={{ objectFit: 'contain' }}
           />
-          <p className="absolute text-2xl font-bold font-mono text-white [text-shadow:2px_2px_4px_rgba(0,0,0,0.5)] pointer-events-none whitespace-nowrap z-10" style={{ top: '50%', left: 'calc(50% + 10px)', transform: 'translate(-50%, -50%)' }}>
+          <p className="absolute top-1/2 left-[calc(50%+18px)] -translate-x-1/2 -translate-y-1/2 text-[2.5rem] font-bold font-mono text-white pointer-events-none whitespace-nowrap z-10 [text-shadow:3px_3px_6px_rgba(0,0,0,0.7),1px_1px_2px_rgba(0,0,0,0.9)]">
             {formattedTime}
           </p>
         </div>
-        <hr className="w-full border-t-[15px] mt-0" />
+        <hr className="w-full mt-0 h-2 bg-gray-300 border-0" />
         
         {/* Break Mode Indicator */}
         {isBreak && (
@@ -153,10 +153,6 @@ export default function TimerDisplay() {
           </div>
         )}
         
-      </div>
-      {/* Break Setting Display */}
-      <div className="mt-4 text-sm text-gray-600 flex flex-col items-center gap-1">
-        <p className="font-medium">Break: {Math.floor(breakDuration / 60)} min ({breakMode})</p>
       </div>
     </div>
   )

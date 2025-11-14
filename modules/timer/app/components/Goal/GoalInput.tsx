@@ -105,15 +105,17 @@ export default function GoalInput() {
       </div>
 
       {/* Goal Input Section */}
-      <div className="space-y-4">
+      <div>
         {!currentGoal && (
           <input
+            id="goal-input"
             type="text"
             value={goalText}
             onChange={(e) => setGoalText(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Enter your next goal..."
-            className="w-full px-6 py-4 text-lg border-b-2 border-gray-300 focus:outline-none focus:border-red-500"
+            aria-label="Enter your next goal"
+            className="py-5 text-xl block w-full my-4"
           />
         )}
         
