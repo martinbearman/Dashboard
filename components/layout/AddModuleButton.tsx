@@ -87,7 +87,7 @@ export default function AddModuleButton() {
         className="fixed bottom-8 right-8 w-14 h-14 bg-gray-800 dark:bg-gray-700 text-white rounded-full shadow-lg hover:bg-gray-900 dark:hover:bg-gray-600 flex items-center justify-center text-2xl"
         aria-label="Add module"
       >
-        +
+        <span className="leading-none translate-y-[-1px]">+</span>
       </button>
 
       {open && (

@@ -101,7 +101,7 @@ export default function DashboardTabs() {
             className="flex items-center gap-2 rounded-full border border-white/30 bg-white/20 px-3 py-2 text-sm text-white/80 transition hover:bg-white/40 hover:text-white"
             aria-label="Add dashboard"
           >
-            <span className="text-lg leading-none">+</span>
+            <span className="text-lg leading-none translate-y-[-1px]">+</span>
           </button>
         </div>
       </div>
