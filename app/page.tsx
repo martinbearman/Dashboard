@@ -71,8 +71,8 @@ export default function Home() {
           className="layout"
           layouts={layouts}
           breakpoints={{ lg: 1024, md: 768, sm: 640, xs: 480, xxs: 0 }}
-          cols={{ lg: 12, md: 8, sm: 6, xs: 4, xxs: 1 }}
-          rowHeight={150}
+          cols={{ lg: 8, md: 6, sm: 4, xs: 3, xxs: 1 }}
+          rowHeight={100}
           margin={[16, 16]}
           compactType="vertical"
           draggableHandle=".module-drag-handle"

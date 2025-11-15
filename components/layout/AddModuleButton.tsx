@@ -8,11 +8,11 @@ import { setModuleConfig } from "@/lib/store/slices/moduleConfigsSlice";
 
 // Decide where to place the next module in the grid so it doesn't overlap.
 function nextPosition(existing: { x: number; y: number; w: number; h: number }[]) {
-  // Simple heuristic: place next item after the last one, wrap at 12 columns
+  // Simple heuristic: place next item after the last one, wrap at 8 columns (lg breakpoint)
   if (existing.length === 0) return { x: 0, y: 0, w: 3, h: 2 };
   const last = existing[existing.length - 1];
   const nextX = last.x + last.w;
-  if (nextX + last.w <= 12) return { x: nextX, y: last.y, w: last.w, h: last.h };
+  if (nextX + last.w <= 8) return { x: nextX, y: last.y, w: last.w, h: last.h };
   return { x: 0, y: last.y + last.h, w: last.w, h: last.h };
 }
 

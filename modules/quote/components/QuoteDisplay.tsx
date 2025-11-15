@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ModuleProps } from "@/lib/types/dashboard";
 
 interface Quote {
@@ -13,19 +13,54 @@ export default function QuoteDisplay({ moduleId, config }: ModuleProps) {
   const [quote, setQuote] = useState<Quote | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const fetchQuote = async () => {
+    // Cancel any existing request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    
+    // Create a new AbortController for this request
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+    
     setLoading(true);
     setError(null);
     
+    let timeoutId: NodeJS.Timeout | null = null;
+    let wasTimeout = false;
+    
+    timeoutId = setTimeout(() => {
+      wasTimeout = true;
+      controller.abort();
+    }, 10000); // 10 second timeout
+    
     try {
-      const response = await fetch("/api/quote");
+      const response = await fetch("/api/quote", {
+        signal: controller.signal,
+      });
+      
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+      }
+      
+      // Check if this is still the active request
+      if (abortControllerRef.current !== controller) {
+        return;
+      }
       
       if (!response.ok) {
-        throw new Error("Failed to fetch quote.");
+        throw new Error(`Failed to fetch quote: ${response.status} ${response.statusText}`);
       }
       
       const data: Array<{ q: string; a: string; h: string }> = await response.json();
+      
+      // Check again if this is still the active request
+      if (abortControllerRef.current !== controller) {
+        return;
+      }
       
       if (data && data.length > 0) {
         // Map API response to readable format
@@ -40,15 +75,55 @@ export default function QuoteDisplay({ moduleId, config }: ModuleProps) {
         throw new Error("No quote received");
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something not right, I couldn't load the quote.");
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+      }
+      
+      // Don't update state if this is no longer the active request
+      if (abortControllerRef.current !== controller) {
+        return;
+      }
+      
+      // Handle abort errors (timeout or manual cancellation)
+      if (err instanceof Error && err.name === 'AbortError') {
+        // If wasTimeout is true, the timeout fired
+        if (wasTimeout) {
+          setError("Request timed out. Please try again.");
+        }
+        // Otherwise it was manually aborted (component unmounting), don't show error
+        return;
+      }
+      
+      if (err instanceof Error) {
+        if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+          setError("Network error. Please check your connection.");
+        } else {
+          setError(err.message);
+        }
+      } else {
+        setError("Something not right, I couldn't load the quote.");
+      }
       console.error("Error fetching quote:", err);
     } finally {
-      setLoading(false);
+      // Only update loading state if this is still the active request
+      if (abortControllerRef.current === controller) {
+        setLoading(false);
+        abortControllerRef.current = null;
+      }
     }
   };
 
   useEffect(() => {
     fetchQuote();
+    
+    return () => {
+      // Cancel any pending request when component unmounts
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+        abortControllerRef.current = null;
+      }
+    };
   }, []);
 
   const getWikipediaUrl = (author: string): string => {
