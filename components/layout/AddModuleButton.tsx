@@ -84,7 +84,7 @@ export default function AddModuleButton() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-8 right-8 w-14 h-14 bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 flex items-center justify-center text-2xl"
+        className="fixed bottom-8 right-8 w-14 h-14 bg-gray-800 dark:bg-gray-700 text-white rounded-full shadow-lg hover:bg-gray-900 dark:hover:bg-gray-600 flex items-center justify-center text-2xl"
         aria-label="Add module"
       >
         +

@@ -1,6 +1,7 @@
 import { DashboardModule } from "@/lib/types/dashboard";
 import TimerModuleComponent from "./timer/TimerModule";
 import TimerConfigPanel from "./timer/app/components/Settings/TimerConfigPanel";
+import QuoteModuleComponent from "./quote/QuoteModule";
 
 // Timer module - component lives in modules/timer/ folder
 const TimerModule: DashboardModule = {
@@ -23,10 +24,10 @@ const TodoModule: DashboardModule = {
 
 const QuoteModule: DashboardModule = {
   type: "quote",
-  displayName: "Motivational Quote",
+  displayName: "Quotes",
   description: "Get inspired with daily motivational quotes",
   defaultGridSize: { w: 3, h: 2 },
-  component: () => <div className="p-4 bg-purple-100 rounded">Quote Module</div>,
+  component: QuoteModuleComponent,
 };
 
 const DateTimeModule: DashboardModule = {
