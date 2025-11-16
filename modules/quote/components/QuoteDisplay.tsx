@@ -180,9 +180,9 @@ export default function QuoteDisplay({ moduleId, config }: ModuleProps) {
               onClick={fetchQuote}
               className="absolute bottom-full right-0 mb-2 px-3 py-1.5 bg-red-600 text-white rounded hover:bg-red-400 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={loading}
-              aria-label="Get quote"
+              aria-label="Get new quote"
             >
-              {loading ? "Loading..." : "get quote"}
+              {loading ? "Loading..." : "New Quote"}
             </button>
             <div className="flex items-center justify-between">
               {error && quote && (

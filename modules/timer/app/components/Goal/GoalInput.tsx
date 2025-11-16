@@ -120,7 +120,7 @@ export default function GoalInput() {
             onKeyDown={handleKeyDown}
             placeholder="Enter your next goal..."
             aria-label="Enter your next goal"
-            className="py-5 text-xl block w-full my-4"
+            className="py-5 px-4 text-xl text-center block w-full my-4"
           />
         )}
         
