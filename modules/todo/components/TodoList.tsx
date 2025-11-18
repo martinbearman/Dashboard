@@ -26,13 +26,13 @@ export default function TodoList({ moduleId, config }: TodoListProps) {
   const [showInput, setShowInput] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Sort todos: active goal first (only one can be active), then by creation date (newest first)
+  // Sort todos: active goal first (only one can be active), then by creation date (oldest first, so new todos appear at end)
   const sortedTodos = [...todos].sort((a, b) => {
     // Active goal always comes first
     if (a.isActiveGoal) return -1;
     if (b.isActiveGoal) return 1;
-    // Otherwise sort by creation date (newest first)
-    return b.createdAt - a.createdAt;
+    // Otherwise sort by creation date (oldest first, so new todos appear at end)
+    return a.createdAt - b.createdAt;
   });
 
   const handleTodoClick = (todoId: string) => {

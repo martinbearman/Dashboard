@@ -178,7 +178,7 @@ export default function QuoteDisplay({ moduleId, config }: ModuleProps) {
           <div className="relative mt-4 pt-4 border-t border-gray-700">
             <button
               onClick={fetchQuote}
-              className="absolute bottom-full right-0 mb-2 px-3 py-1.5 bg-red-600 text-white rounded hover:bg-red-400 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              className="absolute bottom-full right-0 mb-2 px-3 py-1.5 bg-red-500 text-white rounded hover:bg-red-600 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={loading}
               aria-label="Get new quote"
             >

@@ -111,8 +111,8 @@ export default function TimerDisplay() {
       {showBreakPrompt && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-8 max-w-md mx-4 text-center">
-            <h3 className="text-2xl font-bold text-gray-800 mb-4">Study Session Complete! 🎉</h3>
-            <p className="text-gray-600 mb-6">Great work! Would you like to take a break?</p>
+            <h3 className="text-2xl font-bold text-gray-800 mb-4">Session Complete</h3>
+            <p className="text-gray-600 mb-6">Would you like to take a break?</p>
             <div className="space-y-3">
               <button
                 onClick={handleStartBreak}
@@ -122,7 +122,7 @@ export default function TimerDisplay() {
               </button>
               <button
                 onClick={handleSkipBreak}
-                className="w-full px-6 py-3 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600 transition-colors"
+                className="w-full px-6 py-3 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors"
               >
                 Skip Break & Continue
               </button>
