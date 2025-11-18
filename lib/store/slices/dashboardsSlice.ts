@@ -19,16 +19,46 @@ export const createInitialDashboardsState = (): DashboardsState => ({
       modules: [
         {
           id: "m-1",
-          type: "timer", // matches your registry
-          gridPosition: { x: 0, y: 0, w: 3, h: 2 }
+          type: "Timer", // Pomodoro Timer
+          gridPosition: { x: 0, y: 0, w: 2, h: 4 }
+        },
+        {
+          id: "m-2",
+          type: "todo", // Todo List
+          gridPosition: { x: 2, y: 0, w: 3, h: 3 }
+        },
+        {
+          id: "m-3",
+          type: "quote", // Quotes
+          gridPosition: { x: 5, y: 0, w: 3, h: 3 }
         },
       ],
       layouts: {
-        lg: [{ i: "m-1", x: 0, y: 0, w: 3, h: 2 }],
-        md: [{ i: "m-1", x: 0, y: 0, w: 3, h: 2 }],
-        sm: [{ i: "m-1", x: 0, y: 0, w: 3, h: 2 }],
-        xs: [{ i: "m-1", x: 0, y: 0, w: 3, h: 2 }],
-        xxs: [{ i: "m-1", x: 0, y: 0, w: 12, h: 2 }]
+        lg: [
+          { i: "m-1", x: 0, y: 0, w: 2, h: 4 },
+          { i: "m-2", x: 2, y: 0, w: 3, h: 3 },
+          { i: "m-3", x: 5, y: 0, w: 3, h: 3 }
+        ],
+        md: [
+          { i: "m-1", x: 0, y: 0, w: 2, h: 4 },
+          { i: "m-2", x: 2, y: 0, w: 3, h: 3 },
+          { i: "m-3", x: 0, y: 3, w: 6, h: 3 }
+        ],
+        sm: [
+          { i: "m-1", x: 0, y: 0, w: 2, h: 4 },
+          { i: "m-2", x: 2, y: 0, w: 2, h: 3 },
+          { i: "m-3", x: 0, y: 3, w: 4, h: 3 }
+        ],
+        xs: [
+          { i: "m-1", x: 0, y: 0, w: 3, h: 4 },
+          { i: "m-2", x: 0, y: 4, w: 3, h: 3 },
+          { i: "m-3", x: 0, y: 7, w: 3, h: 3 }
+        ],
+        xxs: [
+          { i: "m-1", x: 0, y: 0, w: 1, h: 4 },
+          { i: "m-2", x: 0, y: 4, w: 1, h: 3 },
+          { i: "m-3", x: 0, y: 7, w: 1, h: 3 }
+        ]
       }
     },
   },

@@ -9,9 +9,9 @@ const TimerModule: DashboardModule = {
   type: "Timer",
   displayName: "Pomodoro Timer",
   description: "Pomodoro-style timer for focused work sessions",
-  defaultGridSize: { w: 1, h: 4 },
-  minGridSize: { w: 2, h: 3 },
-  maxGridSize: { w: 3, h: 4 },
+  defaultGridSize: { w: 2, h: 4 },
+  minGridSize: { w: 2, h: 4 },
+  maxGridSize: { w: 3, h: 6 },
   component: TimerModuleComponent,
   configPanel: TimerConfigPanel,
 };
@@ -21,7 +21,7 @@ const TodoModule: DashboardModule = {
   type: "todo",
   displayName: "Todo List",
   description: "Manage your tasks and stay organized",
-  defaultGridSize: { w: 4, h: 3 },
+  defaultGridSize: { w: 3, h: 3 },
   minGridSize: { w: 2, h: 2 },
   maxGridSize: { w: 8, h: 6 },
   component: TodoModuleComponent,
@@ -31,7 +31,7 @@ const QuoteModule: DashboardModule = {
   type: "quote",
   displayName: "Quotes",
   description: "Get inspired with daily motivational quotes",
-  defaultGridSize: { w: 3, h: 2 },
+  defaultGridSize: { w: 3, h: 3 },
   minGridSize: { w: 2, h: 1 },
   maxGridSize: { w: 6, h: 4 },
   component: QuoteModuleComponent,
@@ -61,8 +61,8 @@ export const moduleRegistry: DashboardModule[] = [
   TimerModule,
   TodoModule,
   QuoteModule,
-  DateTimeModule,
-  WeatherModule,
+  // DateTimeModule, // Not built yet
+  // WeatherModule, // Not built yet
 ];
 
 export const getModuleByType = (type: string): DashboardModule | undefined => {
