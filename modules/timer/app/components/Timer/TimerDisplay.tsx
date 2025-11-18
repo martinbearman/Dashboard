@@ -132,14 +132,15 @@ export default function TimerDisplay() {
       )}
 
       <div className="relative w-full flex flex-col items-center">
-        <div className="relative z-20" style={{ width: '180px', height: '180px', marginBottom: '-8px' }}>
+        <div className="relative z-20" style={{ width: '180px', height: '180px', marginBottom: '-8px', minWidth: '180px', minHeight: '180px' }}>
           <Image 
             src="/icons/tomato-too.svg" 
             alt="Timer" 
             width={180}
             height={180}
             priority
-            style={{ objectFit: 'contain', width: '180px', height: '180px' }}
+            unoptimized
+            style={{ objectFit: 'contain', width: '180px', height: '180px', display: 'block' }}
           />
           <p className="absolute top-[calc(50%+10px)] left-[calc(50%+18px)] -translate-x-1/2 -translate-y-1/2 text-[2.5rem] font-mono text-white pointer-events-none whitespace-nowrap z-10 [text-shadow:3px_3px_6px_rgba(0,0,0,0.7),1px_1px_2px_rgba(0,0,0,0.9)]">
             {formattedTime}
