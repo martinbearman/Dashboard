@@ -5,6 +5,7 @@ import "react-resizable/css/styles.css";
 
 import DashboardTabs from "@/components/layout/DashboardTabs";
 import AddModuleButton from "@/components/layout/AddModuleButton";
+import AppVersion from "@/components/layout/AppVersion";
 import { useAppSelector, useAppDispatch } from "@/lib/store/hooks";
 import { getModuleByType } from "@/modules/registry";
 import ModuleWrapper from "@/components/modules/ModuleWrapper";
@@ -116,6 +117,9 @@ export default function Home() {
 
       {/* Floating add button (will become a dropdown sourced from the registry) */}
       <AddModuleButton />
+      
+      {/* Version display */}
+      <AppVersion />
     </main>
   );
 }
