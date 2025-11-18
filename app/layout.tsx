@@ -11,6 +11,7 @@ const lexend = Lexend({
 export const metadata: Metadata = {
   title: "Dashboard",
   description: "Modular dashboard with customizable widgets",
+  robots: "noindex, nofollow",
 };
 
 export default function RootLayout({
