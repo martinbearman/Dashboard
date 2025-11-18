@@ -128,10 +128,14 @@ export default function GoalInput() {
           <button 
             onClick={getButtonClickHandler()}
             disabled={isButtonDisabled}
-            className={`disabled:text-gray-500 disabled:bg-red-100 flex-1 px-6 py-3 font-semibold rounded-lg text-white transition-colors ${
-              currentGoal && !isRunning && timeRemaining !== 0 
-                ? 'bg-green-600 hover:bg-green-400' 
-                : 'bg-red-500 hover:bg-red-600'
+            className={`flex-1 px-6 py-3 font-semibold rounded-lg transition-colors ${
+              isButtonDisabled
+                ? 'bg-red-100 text-gray-400 cursor-not-allowed'
+                : `text-white ${
+                    currentGoal && !isRunning && timeRemaining !== 0 
+                      ? 'bg-green-600 hover:bg-green-400' 
+                      : 'bg-red-500 hover:bg-red-600'
+                  }`
             }`}
           >
             {handleGetButtonText()}

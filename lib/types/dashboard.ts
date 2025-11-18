@@ -31,6 +31,8 @@ export interface DashboardModule {
   description: string;
   icon?: ReactNode;
   defaultGridSize: { w: number; h: number };
+  minGridSize?: { w: number; h: number };
+  maxGridSize?: { w: number; h: number };
   component: React.ComponentType<ModuleProps>;
   configPanel?: React.ComponentType<ModuleConfigProps>;
 }

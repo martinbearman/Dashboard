@@ -50,7 +50,24 @@ export default function AddModuleButton() {
     const dash = dashboards[activeDashboardId];
     const positions = dash.modules.map((m) => m.gridPosition);
     const meta = moduleRegistry.find((m) => m.type === type);
-    const size = meta?.defaultGridSize ?? { w: 3, h: 2 };
+    let size = meta?.defaultGridSize ?? { w: 3, h: 2 };
+    
+    // Ensure default size respects min/max constraints
+    if (meta) {
+      if (meta.minGridSize) {
+        size = {
+          w: Math.max(size.w, meta.minGridSize.w),
+          h: Math.max(size.h, meta.minGridSize.h),
+        };
+      }
+      if (meta.maxGridSize) {
+        size = {
+          w: Math.min(size.w, meta.maxGridSize.w),
+          h: Math.min(size.h, meta.maxGridSize.h),
+        };
+      }
+    }
+    
     const pos = positions.length
       ? nextPosition(positions)
       : { x: 0, y: 0, w: size.w, h: size.h };

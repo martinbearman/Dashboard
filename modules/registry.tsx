@@ -9,7 +9,9 @@ const TimerModule: DashboardModule = {
   type: "Timer",
   displayName: "Pomodoro Timer",
   description: "Pomodoro-style timer for focused work sessions",
-  defaultGridSize: { w: 4, h: 3 },
+  defaultGridSize: { w: 1, h: 4 },
+  minGridSize: { w: 2, h: 3 },
+  maxGridSize: { w: 3, h: 4 },
   component: TimerModuleComponent,
   configPanel: TimerConfigPanel,
 };
@@ -20,6 +22,8 @@ const TodoModule: DashboardModule = {
   displayName: "Todo List",
   description: "Manage your tasks and stay organized",
   defaultGridSize: { w: 4, h: 3 },
+  minGridSize: { w: 2, h: 2 },
+  maxGridSize: { w: 8, h: 6 },
   component: TodoModuleComponent,
 };
 
@@ -28,6 +32,8 @@ const QuoteModule: DashboardModule = {
   displayName: "Quotes",
   description: "Get inspired with daily motivational quotes",
   defaultGridSize: { w: 3, h: 2 },
+  minGridSize: { w: 2, h: 1 },
+  maxGridSize: { w: 6, h: 4 },
   component: QuoteModuleComponent,
 };
 
@@ -36,6 +42,8 @@ const DateTimeModule: DashboardModule = {
   displayName: "Date & Time",
   description: "Display current date and time",
   defaultGridSize: { w: 2, h: 2 },
+  minGridSize: { w: 2, h: 1 },
+  maxGridSize: { w: 4, h: 3 },
   component: () => <div className="p-4 bg-yellow-100 rounded">DateTime Module</div>,
 };
 
@@ -44,6 +52,8 @@ const WeatherModule: DashboardModule = {
   displayName: "Weather",
   description: "Check the current weather conditions",
   defaultGridSize: { w: 3, h: 2 },
+  minGridSize: { w: 2, h: 1 },
+  maxGridSize: { w: 5, h: 4 },
   component: () => <div className="p-4 bg-cyan-100 rounded">Weather Module</div>,
 };
 

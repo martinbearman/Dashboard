@@ -137,13 +137,13 @@ export function ModuleDragHandle({ moduleId, locked, moduleName }: ModuleDragHan
 
       {/* Menu button - separate from drag handle */}
       <div 
-        className="relative z-20 module-actions-interactive"
+        className="relative z-30 module-actions-interactive"
         onMouseDown={handleMenuInteraction}
         onPointerDown={handleMenuInteraction}
       >
         <button
           type="button"
-          className="relative z-20 flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300 bg-white text-gray-700 transition hover:bg-gray-50 hover:border-gray-400 hover:scale-110"
+          className="relative z-30 flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300 bg-white text-gray-700 transition hover:bg-gray-50 hover:border-gray-400 hover:scale-110"
           aria-label="Open module menu"
           aria-haspopup="menu"
           aria-expanded={isOpen}
@@ -156,7 +156,7 @@ export function ModuleDragHandle({ moduleId, locked, moduleName }: ModuleDragHan
         {isOpen ? (
           <div
             role="menu"
-            className="module-actions-interactive absolute right-0 mt-2 w-40 overflow-hidden rounded-md border border-gray-200 bg-white shadow-lg z-10"
+            className="module-actions-interactive absolute right-0 mt-2 w-40 overflow-hidden rounded-md border border-gray-200 bg-white shadow-lg z-30"
             onMouseDown={handleMenuInteraction}
             onPointerDown={handleMenuInteraction}
           >

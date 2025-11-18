@@ -29,12 +29,31 @@ export default function Home() {
   const baseLayouts: Layouts =
     active?.layouts ? ({ ...defaultLayouts, ...active.layouts } as Layouts) : defaultLayouts;
   
-  // Mark locked modules as static (non-draggable)
+  // Mark locked modules as static (non-draggable) and apply min/max constraints
   const layouts: Layouts = Object.keys(baseLayouts).reduce((acc, bp) => {
-    acc[bp as keyof Layouts] = baseLayouts[bp as keyof Layouts].map((item) => ({
-      ...item,
-      static: moduleConfigs[item.i]?.locked ?? false,
-    }));
+    acc[bp as keyof Layouts] = baseLayouts[bp as keyof Layouts].map((item) => {
+      const moduleInstance = active?.modules.find((m) => m.id === item.i);
+      const moduleMeta = moduleInstance ? getModuleByType(moduleInstance.type) : null;
+      
+      const layoutItem: Layout = {
+        ...item,
+        static: moduleConfigs[item.i]?.locked ?? false,
+      };
+      
+      // Apply min/max constraints from module metadata
+      if (moduleMeta) {
+        if (moduleMeta.minGridSize) {
+          layoutItem.minW = moduleMeta.minGridSize.w;
+          layoutItem.minH = moduleMeta.minGridSize.h;
+        }
+        if (moduleMeta.maxGridSize) {
+          layoutItem.maxW = moduleMeta.maxGridSize.w;
+          layoutItem.maxH = moduleMeta.maxGridSize.h;
+        }
+      }
+      
+      return layoutItem;
+    });
     return acc;
   }, {} as Layouts);
 
