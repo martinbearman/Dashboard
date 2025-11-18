@@ -132,7 +132,7 @@ export default function TimerDisplay() {
       )}
 
       <div className="relative w-full flex flex-col items-center">
-        <div className="relative z-20" style={{ width: '180px', height: '180px', marginBottom: '-8px', minWidth: '180px', minHeight: '180px' }}>
+        <div className="relative z-20" style={{ width: '180px', height: '180px', marginBottom: '-18px' }}>
           <Image 
             src="/icons/tomato-too.svg" 
             alt="Timer" 
@@ -140,14 +140,14 @@ export default function TimerDisplay() {
             height={180}
             priority
             unoptimized
-            style={{ objectFit: 'contain', width: '180px', height: '180px', display: 'block' }}
+            style={{ objectFit: 'contain', display: 'block' }}
           />
           <p className="absolute top-[calc(50%+10px)] left-[calc(50%+18px)] -translate-x-1/2 -translate-y-1/2 text-[2.5rem] font-mono text-white pointer-events-none whitespace-nowrap z-10 [text-shadow:3px_3px_6px_rgba(0,0,0,0.7),1px_1px_2px_rgba(0,0,0,0.9)]">
             {formattedTime}
           </p>
         </div>
         {/* 3D Shelf (Trapezium) */}
-        <div className="relative w-full mt-0 z-10" style={{ height: '20px', minHeight: '20px' }}>
+        <div className="relative w-full mt-0 z-10" style={{ height: '20px' }}>
           {/* Top surface of shelf */}
           <div 
             className="absolute w-full bg-gray-300"
