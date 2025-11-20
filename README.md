@@ -4,20 +4,12 @@ A modular dashboard application built with Next.js, Redux, and Tailwind CSS. Cre
 
 ## Features
 
-- 📊 Multi-dashboard system (like macOS Spaces)
+- 📊 Multi-dashboard system
 - 🧩 Modular widget system
 - 🔄 Redux state management for cross-module communication
 - 🎨 Tailwind CSS for styling
 - 💾 LocalStorage persistence
 - ⌨️ TypeScript for type safety
-
-## Planned Modules
-
-- ⏱️ Timer (Pomodoro)
-- ✅ Todo List
-- 💬 Motivational Quotes
-- 📅 Date & Time
-- 🌤️ Weather
 
 ## Tech Stack
 
@@ -109,18 +101,18 @@ describe('MyComponent', () => {
 ## Development Roadmap
 
 - [x] Project setup and configuration
-- [ ] TypeScript types and interfaces
-- [ ] Redux store structure
-- [ ] Module registry system
-- [ ] Base layout components
-- [ ] Dashboard tabs (macOS-style)
-- [ ] Add module dropdown
-- [ ] Drag-and-drop functionality
-- [ ] LocalStorage persistence
-- [ ] Welcome dashboard with test module
-- [ ] Timer module integration
-- [ ] Todo module
-- [ ] Quote module
+- [x] TypeScript types and interfaces
+- [x] Redux store structure
+- [x] Module registry system
+- [x] Base layout components
+- [x] Dashboard tabs (macOS-style)
+- [x] Add module dropdown
+- [x] Drag-and-drop functionality
+- [x] LocalStorage persistence
+- [x] Welcome dashboard with test module
+- [x] Timer module integration
+- [x] Todo module
+- [x] Quote module
 - [ ] DateTime module
 - [ ] Weather module
 
