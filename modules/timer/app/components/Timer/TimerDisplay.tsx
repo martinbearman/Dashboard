@@ -13,7 +13,6 @@ export default function TimerDisplay() {
   const dispatch = useAppDispatch()
   const formattedTime = formatTime(timeRemaining)
   const startTimeRef = useRef<number | null>(null)
-  const lastUpdateTimeRef = useRef<number>(Date.now())
 
   const initializeStartTime = useCallback(() => {
     if (!startTimeRef.current) {

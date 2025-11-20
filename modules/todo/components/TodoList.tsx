@@ -7,7 +7,7 @@ import { formatTime, formatTimeStamp, isToday } from "@/modules/timer/lib/utils"
 import { useState, useRef, useEffect } from "react";
 
 const MAX_GOAL_DESCRIPTION_LENGTH = 40;
-const DISPLAY_MAX_LENGTH = 20;
+const DISPLAY_MAX_LENGTH = 40;
 
 interface TodoListProps {
   moduleId: string;
